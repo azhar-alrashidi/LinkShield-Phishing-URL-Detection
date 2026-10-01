@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LinkShield | AI Threat Intelligence</title>
+    <style>
+        body { margin: 0; background-color: #0f131a; color: #e1e8f0; font-family: 'Segoe UI', sans-serif; padding: 40px 15px; text-align: center; }
+        .container { background-color: #161b22; border-radius: 12px; padding: 40px; max-width: 700px; margin: auto; box-sizing: border-box; }
+        h1 { color: #4f94ff; font-size: 32px; margin-bottom: 10px; }
+        p.sub-text { color: #8b949e; margin-bottom: 30px; font-size: 14px; }
+        a { color: #4f94ff; }
+        .nav { margin-bottom: 20px; }
+        .nav a { margin: 0 8px; }
+        input[type="text"] { width: 90%; padding: 14px; border-radius: 10px; border: 1px solid #30363d; background-color: #0d1117; color: white; margin-bottom: 20px; font-size: 15px; box-sizing: border-box; }
+        button { background-color: #2ea043; color: white; border: none; padding: 12px 50px; border-radius: 8px; cursor: pointer; font-weight: bold; transition: background-color .3s ease; }
+        button:hover { background-color: #3fb950; }
+        .error { color: #f85149; margin-top: 15px; font-size: 14px; }
+        .result-card { margin-top: 30px; padding: 25px; border-radius: 12px; text-align: left; box-shadow: 0 4px 15px rgba(0,0,0,.3); }
+        .safe-card { border: 2px solid #3fb950; background: rgba(63,185,80,.05); }
+        .danger-card { border: 2px solid #f85149; background: rgba(248,81,73,.05); border-left: 10px solid #f85149; }
+        .status-badge { font-weight: bold; font-size: 22px; margin-bottom: 10px; display: block; }
+        .recommendation { font-size: 14px; margin: 15px 0; padding: 12px; border-radius: 8px; background-color: #21262d; }
+        .reason-list { font-size: 13px; color: #8b949e; margin-top: 10px; overflow-wrap: anywhere; }
+        .footer { margin-top: 30px; font-size: 11px; color: #484f58; }
+        .popup { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #000; padding: 25px; border-radius: 15px; box-shadow: 0 0 20px rgba(0,0,0,.6); z-index: 9999; text-align: center; width: 350px; max-width: 90%; box-sizing: border-box; }
+        .popup h2 { color: #f85149; margin-top: 0; }
+        @media (max-width: 768px) { .container { padding: 20px; } h1 { font-size: 24px; } input[type="text"] { width: 100%; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🛡 LinkShield Expert</h1>
+        <p class="sub-text">Cybersecurity Intelligence: Machine Learning URL Analysis</p>
+
+        <div class="nav">
+            <a href="/">Home</a>
+            <a href="/history">Session History</a>
+            <a href="/admin/login">Admin</a>
+        </div>
+
+        <form method="POST">
+            <input type="text" name="url" value="{{ url }}" placeholder="Paste the link to analyze..." required>
+            <br>
+            <button type="submit">Execute Intelligence Scan</button>
+        </form>
+
+        {% if error %}<div class="error">{{ error }}</div>{% endif %}
+
+        {% if result %}
+        <div class="result-card {{ 'safe-card' if result == 'SAFE' else 'danger-card' }}">
+            <span class="status-badge">Verdict: {{ result }} {{ '✅' if result == 'SAFE' else '❌' }}</span>
+
+            <div class="reason-list">
+                <strong>Technical Analysis Report:</strong><br>
+                {% if reasons %}
+                    {% for r in reasons %} • {{ r }}<br> {% endfor %}
+                {% else %}
+                    ✅ No anomalies detected in current URL structure.
+                {% endif %}
+            </div>
+
+            <div class="recommendation"><strong>🛡 Guidance:</strong> {{ recommendation }}</div>
+
+            <form method="POST" action="/download_pdf">
+                <input type="hidden" name="url" value="{{ url }}">
+                <input type="hidden" name="result" value="{{ result }}">
+                {% for r in reasons %}<input type="hidden" name="reasons" value="{{ r }}">{% endfor %}
+                <input type="hidden" name="recommendation" value="{{ recommendation }}">
+                <button type="submit">⬇️ Download PDF</button>
+            </form>
+        </div>
+        {% endif %}
+
+        <div class="footer">
+            Architecture: Random Forest | Reliability: {{ accuracy }}% | Engine Status: <span style="color:#3fb950;">Active</span>
+        </div>
+    </div>
+
+    {% if result == "MALICIOUS" %}
+    <div id="popup" class="popup" role="alertdialog" aria-labelledby="popup-title">
+        <h2 id="popup-title">⚠️ Warning</h2>
+        <p style="font-size:18px;">This link is dangerous and may be a phishing site.<br>Do not enter any personal information.</p>
+        <button onclick="document.getElementById('popup').style.display='none'">Got it</button>
+    </div>
+    {% endif %}
+</body>
+</html>

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <title>Session History | LinkShield</title>
+    <style>
+        body {
+            background-color: #0f131a;
+            color: #e1e8f0;
+            font-family: 'Segoe UI', sans-serif;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .container {
+            background-color: #161b22;
+            border-radius: 12px;
+            padding: 40px;
+            max-width: 800px;
+            margin: auto;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+        }
+
+        h1 {
+            color: #4f94ff;
+            font-size: 32px;
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 12px;
+            border-bottom: 1px solid #30363d;
+            text-align: left;
+        }
+
+        th {
+            color: #8b949e;
+            font-weight: bold;
+        }
+
+        td {
+            font-size: 14px;
+        }
+
+        .safe {
+            color: #3fb950;
+            font-weight: bold;
+        }
+
+        .malicious {
+            color: #f85149;
+            font-weight: bold;
+        }
+
+        .back-link {
+            color: #4f94ff;
+            margin-top: 20px;
+            display: inline-block;
+            text-decoration: none;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        @media (max-width: 768px) {
+    body {
+        padding: 15px;
+    }
+
+    .container, .card {
+        width: 95% !important;
+        max-width: 95% !important;
+        margin: 20px auto !important;
+        padding: 15px !important;
+    }
+
+    table {
+        width: 100% !important;
+        display: block;
+        overflow-x: auto;
+        font-size: 12px;
+    }
+
+    th, td {
+        padding: 8px;
+        white-space: nowrap;
+    }
+
+    h1 {
+        font-size: 24px;
+    }
+}
+    </style>
+</head>
+<body>
+    <div style="margin-bottom:20px;">
+  <a href="/">Home</a> |
+  <a href="/admin/login">Admin</a>
+</div>
+    <div class="container">
+        <h1>Session History</h1>
+        {% if history %}
+        <table>
+            <tr>
+                <th>URL</th>
+                <th>Result</th>
+                <th>Time</th>
+            </tr>
+            {% for entry in history %}
+            <tr>
+                <td>{{ entry.url }}</td>
+                <td class="{{ 'safe' if entry.result == 'SAFE' else 'malicious' }}">
+                    {{ entry.result }} {{ '🛡️' if entry.result == 'SAFE' else '⚠️' }}
+                </td>
+                <td>{{ entry.time }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+        {% else %}
+        <p>No session history available.</p>
+        {% endif %}
+
+        <a href="/" class="back-link">← Back to Scan</a>
+    </div>
+</body>
+</html>

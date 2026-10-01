@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <title>Admin Dashboard | LinkShield</title>
+  <style>
+    body{background:#0f131a;color:#e1e8f0;font-family:'Segoe UI',sans-serif;padding:30px}
+    .wrap{max-width:980px;margin:auto}
+    .top{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
+    .card{background:#161b22;border:1px solid #30363d;border-radius:12px;padding:18px;margin-bottom:16px;box-shadow:0 8px 20px rgba(0,0,0,.35)}
+    h1{margin:0;color:#4f94ff}
+    .muted{color:#8b949e;font-size:13px}
+    .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:12px}
+    .stat{background:#0d1117;border:1px solid #30363d;border-radius:10px;padding:12px}
+    .stat .v{font-size:22px;font-weight:700;margin-top:6px}
+    .btn{background:#2ea043;color:#fff;border:none;padding:10px 14px;border-radius:8px;cursor:pointer;font-weight:700}
+    .btn:hover{background:#3fb950}
+    .btn2{background:#21262d;border:1px solid #30363d;color:#e1e8f0}
+    .btn2:hover{background:#2b313a}
+    table{width:100%;border-collapse:collapse;margin-top:10px}
+    th,td{padding:10px;border-bottom:1px solid #30363d;text-align:left;font-size:14px}
+    th{color:#8b949e}
+    .pill{padding:4px 10px;border-radius:999px;font-weight:700;font-size:12px;display:inline-block}
+    .safe{background:rgba(63,185,80,.12);color:#3fb950;border:1px solid rgba(63,185,80,.35)}
+    .mal{background:rgba(248,81,73,.12);color:#f85149;border:1px solid rgba(248,81,73,.35)}
+    .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+    .input{background:#0d1117;border:1px solid #30363d;color:#e1e8f0;border-radius:10px;padding:10px 12px;min-width:220px}
+    a{color:#4f94ff;text-decoration:none}
+    a:hover{text-decoration:underline}
+    @media (max-width: 768px) {
+
+    body {
+        padding: 15px;
+    }
+
+    .container,
+    .admin-container,
+    .card {
+        width: 95% !important;
+        max-width: 95% !important;
+        margin: 20px auto !important;
+        padding: 15px !important;
+    }
+
+    table {
+        width: 100% !important;
+        display: block;
+        overflow-x: auto;
+        font-size: 12px;
+    }
+
+    th, td {
+        padding: 8px;
+        white-space: nowrap;
+    }
+
+    input,
+    button,
+    select {
+        width: 100%;
+        font-size: 16px;
+    }
+
+    h1 {
+        font-size: 24px;
+    }
+}
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <div>
+      <h1>🛠 Admin Dashboard</h1>
+      <div class="muted">LinkShield • Database Overview</div>
+    </div>
+    <div class="row">
+      <a class="btn btn2" href="/">Back to Scan</a>
+      <a class="btn btn2" href="/admin/logout">Logout</a>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="muted">Quick stats</div>
+    <div class="grid">
+      <div class="stat">
+        <div class="muted">Total Scans</div>
+        <div class="v">{{ total_scans }}</div>
+      </div>
+      <div class="stat">
+        <div class="muted">SAFE</div>
+        <div class="v">{{ safe_count }}</div>
+      </div>
+      <div class="stat">
+        <div class="muted">MALICIOUS</div>
+        <div class="v">{{ malicious_count }}</div>
+      </div>
+      <div class="stat">
+        <div class="muted">Model Accuracy</div>
+        <div class="v">{{ accuracy }}%</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="row" style="justify-content:space-between">
+      <div>
+        <div style="font-weight:800">Scan latest</div>
+        <div class="muted">Filter and view database latest</div>
+      </div>
+
+      <form method="GET" action="/admin" class="row" style="margin:0">
+        <select name="filter" class="input">
+          <option value="ALL" {% if filter=='ALL' %}selected{% endif %}>ALL</option>
+          <option value="SAFE" {% if filter=='SAFE' %}selected{% endif %}>SAFE</option>
+          <option value="MALICIOUS" {% if filter=='MALICIOUS' %}selected{% endif %}>MALICIOUS</option>
+        </select>
+        <button class="btn" type="submit">Apply</button>
+      </form>
+    </div>
+
+    <table>
+      <tr>
+        <th>ID</th>
+        <th>URL</th>
+        <th>Result</th>
+        <th>Time</th>
+      </tr>
+
+      {% for r in latest %}
+      <tr>
+        <td>{{ r.id }}</td>
+        <td style="word-break:break-all">{{ r.url_address }}</td>
+        <td>
+          {% if r.result == 'SAFE' %}
+            <span class="pill safe">SAFE</span>
+          {% else %}
+            <span class="pill mal">MALICIOUS</span>
+          {% endif %}
+        </td>
+        <td>{{ r.timestamp }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+
+    {% if not latest %}
+      <div class="muted" style="margin-top:12px">No latest found for this filter.</div>
+    {% endif %}
+  </div>
+
+</div>
+</body>
+</html>
