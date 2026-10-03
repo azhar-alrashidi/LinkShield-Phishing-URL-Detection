@@ -2,6 +2,12 @@
 
 A machine-learning web app that detects phishing URLs. Paste a link and get an instant **SAFE / MALICIOUS** verdict, a technical analysis of why, and a downloadable PDF report.
 
+## Screenshots
+
+| Safe link | Malicious link | Admin dashboard |
+|---|---|---|
+| ![Safe](screenshots/scan.png) | ![Malicious](screenshots/malicious.png) | ![Admin](screenshots/admin.png) |
+
 
 ## Features
 
