@@ -12,17 +12,17 @@ try:
     print("-" * 60)
     
     # 2. Data Dimensions (Rows and Columns)
-    print(f"📊 Dataset Dimensions: {df.shape[0]} URL entries with {df.shape[1]} features.")
+    print(f" Dataset Dimensions: {df.shape[0]} URL entries with {df.shape[1]} features.")
     
     # 3. Features Overview (Column names for technical review)
-    print(f"📝 Available Columns: {list(df.columns)}")
+    print(f" Available Columns: {list(df.columns)}")
     
     # 4. Data Preview (Displaying the first 5 records)
-    print("\n🧐 Sample Data Preview:")
+    print("\n Sample Data Preview:")
     print(df.head())
     
     # 5. Class Distribution Analysis (Benign vs. Malicious)
-    print("\n⚖️ Label Distribution (Target Analysis):")
+    print("\n Label Distribution (Target Analysis):")
     print(df['Label'].value_counts())
 
 except FileNotFoundError:
