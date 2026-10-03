@@ -28,21 +28,22 @@ Python · Flask · scikit-learn · pandas · SQLAlchemy (SQLite) · fpdf2
 
 ## Dataset
 
+## Dataset
+
 The model was trained on a merged dataset compiled from three public sources:
 
-1. [SOURCE 1 NAME](LINK) - short description
-2. [SOURCE 2 NAME](LINK) - short description
-3. [SOURCE 3 NAME](LINK) - short description
+1. [Phishing Site URLs (Kaggle)](https://www.kaggle.com/datasets/taruntiwarihp/phishing-site-urls) - labeled phishing and legitimate URLs
+2. [Majestic Million](https://majestic.com/reports/majestic-million) - top 1 million websites, used as safe URLs
+3. [PhishTank](https://phishtank.org/developer_info.php) - community-verified phishing URLs
 
 Preprocessing: duplicates removed, URLs cleaned and validated, safe class undersampled to balance the classes.
-The merged dataset is available on Kaggle: [LINK].
 
-> The dataset is not included in this repo because of its size. Download it and save it as `data/phishing_site_urls.csv`.
+> The dataset is not included in this repo because of its size. Download the sources above, merge them, and save the result as `data/phishing_site_urls.csv` with two columns: `URL` and `Label` (`good` / `bad`).
 
 ## Getting started
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/LinkShield.git
+git clone https://github.com/azhar-alrashidi/LinkShield.git
 cd LinkShield
 python -m venv venv && source venv/bin/activate   # Windows: venv\Scripts\activate
 pip install -r requirements.txt
